@@ -29,4 +29,3 @@ setup(
         "Operating System :: Microsoft :: Windows",
     ]
 )
-'pypi-AgENdGVzdC5weXBpLm9yZwIkZTE3MDU1YTEtNDQ0Yi00NTg4LWI1MDAtZjVjZmIwNWM0MWQ0AAIqWzMsImFlZjEwMDViLTljYTctNDZlZS05NWZmLTQ0YmQxNTU4ZjRhNyJdAAAGIJ09aNzvOQsh2R33RL4UJQ0QwKt1_M-7uYc_6fOJm93M'
