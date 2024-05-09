@@ -14,7 +14,7 @@ from marksfuncs import Exponential
 Exponential(a=4, b=2, x_values_list=[-5, 5, 100])
 ```
 
-Convert The Grafic to a Image
+Convert The Grafic to an Image
 
 ```python
 from marksfuncs import Linear
