@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-VERSION = '0.1'
+VERSION = '0.2'
 DESCRIPTION = 'Graph many mathematical functions'
 working_directory = os.path.abspath(os.path.dirname(__file__))
 
@@ -13,6 +13,7 @@ setup(
     version=VERSION,
     author="mark. (Marc Pérez)",
     author_email="<marcperezcarrasco2010@gmail.com>",
+    url='https://github.com/marc1fino/marksfuncs',
     description=DESCRIPTION,
     long_description=long_description1,
     long_description_content_type='text/markdown',
