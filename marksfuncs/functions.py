@@ -2202,6 +2202,38 @@ class Hill:
         if missing:
             raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
+    def graph(self):
+        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
+        y_values = self.vmax * (x_values**self.n) / (self.k**self.n + x_values**self.n)
+        
+        plt.figure("Hill Function")
+        plt.plot(x_values, y_values, label=f'f(x) = {self.vmax}x^{self.n}/({self.k}^{self.n} + x^{self.n})')
+        plt.xlabel('x')
+        plt.ylabel('f(x)')
+        plt.title('Hill Function')
+        plt.grid(True)
+        plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
+        plt.show()
+
+    def image(self):
+        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
+        y_values = self.vmax * (x_values**self.n) / (self.k**self.n + x_values**self.n)
+        
+        plt.figure("Hill Function")
+        plt.plot(x_values, y_values, label=f'f(x) = {self.vmax}x^{self.n}/({self.k}^{self.n} + x^{self.n})')
+        plt.xlabel('x')
+        plt.ylabel('f(x)')
+        plt.title('Hill Function')
+        plt.grid(True)
+        plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
+        img_buf = io.BytesIO()
+        plt.savefig(img_buf, format='png')
+        return img_buf
+
 class MichaelisMenten:
     def __init__(self, vmax=None, km=None, x_values_list=None, y_values=None):
         """
@@ -2219,6 +2251,38 @@ class MichaelisMenten:
         missing = [param for param, value in required_params.items() if value is None]
         if missing:
             raise ValueError(f"Missing required parameters: {', '.join(missing)}")
+
+    def graph(self):
+        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
+        y_values = (self.vmax * x_values) / (self.km + x_values)
+        
+        plt.figure("Michaelis-Menten Function")
+        plt.plot(x_values, y_values, label=f'f(x) = {self.vmax}x/({self.km} + x)')
+        plt.xlabel('x')
+        plt.ylabel('f(x)')
+        plt.title('Michaelis-Menten Function')
+        plt.grid(True)
+        plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
+        plt.show()
+
+    def image(self):
+        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
+        y_values = (self.vmax * x_values) / (self.km + x_values)
+        
+        plt.figure("Michaelis-Menten Function")
+        plt.plot(x_values, y_values, label=f'f(x) = {self.vmax}x/({self.km} + x)')
+        plt.xlabel('x')
+        plt.ylabel('f(x)')
+        plt.title('Michaelis-Menten Function')
+        plt.grid(True)
+        plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
+        img_buf = io.BytesIO()
+        plt.savefig(img_buf, format='png')
+        return img_buf
 
 class Beta:
     def __init__(self, alpha=None, beta=None, x_values_list=None, y_values=None):
@@ -2238,6 +2302,38 @@ class Beta:
         if missing:
             raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
+    def graph(self):
+        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
+        y_values = scipy.stats.beta.pdf(x_values, self.alpha, self.beta)
+        
+        plt.figure("Beta Distribution")
+        plt.plot(x_values, y_values, label=f'Beta(α={self.alpha}, β={self.beta})')
+        plt.xlabel('x')
+        plt.ylabel('f(x)')
+        plt.title('Beta Distribution')
+        plt.grid(True)
+        plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
+        plt.show()
+
+    def image(self):
+        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
+        y_values = scipy.stats.beta.pdf(x_values, self.alpha, self.beta)
+        
+        plt.figure("Beta Distribution")
+        plt.plot(x_values, y_values, label=f'Beta(α={self.alpha}, β={self.beta})')
+        plt.xlabel('x')
+        plt.ylabel('f(x)')
+        plt.title('Beta Distribution')
+        plt.grid(True)
+        plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
+        img_buf = io.BytesIO()
+        plt.savefig(img_buf, format='png')
+        return img_buf
+
 class Gamma:
     def __init__(self, k=None, theta=None, x_values_list=None, y_values=None):
         """
@@ -2256,6 +2352,38 @@ class Gamma:
         if missing:
             raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
+    def graph(self):
+        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
+        y_values = scipy.stats.gamma.pdf(x_values, self.k, scale=self.theta)
+        
+        plt.figure("Gamma Distribution")
+        plt.plot(x_values, y_values, label=f'Gamma(k={self.k}, θ={self.theta})')
+        plt.xlabel('x')
+        plt.ylabel('f(x)')
+        plt.title('Gamma Distribution')
+        plt.grid(True)
+        plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
+        plt.show()
+
+    def image(self):
+        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
+        y_values = scipy.stats.gamma.pdf(x_values, self.k, scale=self.theta)
+        
+        plt.figure("Gamma Distribution")
+        plt.plot(x_values, y_values, label=f'Gamma(k={self.k}, θ={self.theta})')
+        plt.xlabel('x')
+        plt.ylabel('f(x)')
+        plt.title('Gamma Distribution')
+        plt.grid(True)
+        plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
+        img_buf = io.BytesIO()
+        plt.savefig(img_buf, format='png')
+        return img_buf
+
 class Poisson:
     def __init__(self, lambda_param=None, x_values_list=None, y_values=None):
         """
@@ -2271,6 +2399,38 @@ class Poisson:
         missing = [param for param, value in required_params.items() if value is None]
         if missing:
             raise ValueError(f"Missing required parameters: {', '.join(missing)}")
+
+    def graph(self):
+        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
+        y_values = scipy.stats.poisson.pmf(x_values, self.lambda_param)
+        
+        plt.figure("Poisson Distribution")
+        plt.plot(x_values, y_values, label=f'Poisson(λ={self.lambda_param})')
+        plt.xlabel('x')
+        plt.ylabel('f(x)')
+        plt.title('Poisson Distribution')
+        plt.grid(True)
+        plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
+        plt.show()
+
+    def image(self):
+        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
+        y_values = scipy.stats.poisson.pmf(x_values, self.lambda_param)
+        
+        plt.figure("Poisson Distribution")
+        plt.plot(x_values, y_values, label=f'Poisson(λ={self.lambda_param})')
+        plt.xlabel('x')
+        plt.ylabel('f(x)')
+        plt.title('Poisson Distribution')
+        plt.grid(True)
+        plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
+        img_buf = io.BytesIO()
+        plt.savefig(img_buf, format='png')
+        return img_buf
 
 class ChiSquare:
     def __init__(self, df=None, x_values_list=None, y_values=None):

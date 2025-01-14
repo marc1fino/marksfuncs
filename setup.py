@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-VERSION = '0.2'
+VERSION = '1.0'
 DESCRIPTION = 'Graph many mathematical functions'
 working_directory = os.path.abspath(os.path.dirname(__file__))
 
