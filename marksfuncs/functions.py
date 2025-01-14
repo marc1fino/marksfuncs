@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy
 import io
+import re
 from PIL import Image
 
 class Linear:
@@ -53,13 +54,24 @@ class Linear:
 
 
 class Quadratic:
-    def __init__(self, a=None, b=None, c=None, x_values_list=None):
+    def __init__(self, a=None, b=None, c=None, x_values_list=None, y_values=None):
+        """
+        Initialize a quadratic function with parameters:
+        :param a: Coefficient of x²
+        :param b: Coefficient of x
+        :param c: Constant term
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
         self.a = a
         self.b = b
         self.c = c
         self.x_values_list = x_values_list
-        if any(param is None for param in [a, b, c, x_values_list]):
-            raise ValueError("All parameters must be provided.")
+        self.y_values = y_values
+        required_params = {'a': a, 'b': b, 'c': c, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
     def graph(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -73,6 +85,8 @@ class Quadratic:
         plt.title('Quadratic Function')
         plt.grid(True)
         plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
         plt.show()
 
     def image(self):
@@ -87,18 +101,30 @@ class Quadratic:
         plt.title('Quadratic Function')
         plt.grid(True)
         plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
         img_buf = io.BytesIO()
         plt.savefig(img_buf, format='png')
         
         return img_buf
 
 class Exponential:
-    def __init__(self, a=None, b=None, x_values_list=None):
+    def __init__(self, a=None, b=None, x_values_list=None, y_values=None):
+        """
+        Initialize an exponential function with parameters:
+        :param a: Base coefficient
+        :param b: Exponent coefficient
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
         self.a = a
         self.b = b
         self.x_values_list = x_values_list
-        if any(param is None for param in [a, b, x_values_list]):
-            raise ValueError("All parameters must be provided.")
+        self.y_values = y_values
+        required_params = {'a': a, 'b': b, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
     def graph(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -112,6 +138,8 @@ class Exponential:
         plt.title('Exponential Function')
         plt.grid(True)
         plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
         plt.show()
     def image(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -130,12 +158,22 @@ class Exponential:
         
         return img_buf
 class Logarithmic:
-    def __init__(self, a=None, b=None, x_values_list=None):
+    def __init__(self, a=None, b=None, x_values_list=None, y_values=None):
+        """
+        Initialize a logarithmic function with parameters:
+        :param a: Coefficient of logarithm
+        :param b: Base coefficient
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
         self.a = a
         self.b = b
         self.x_values_list = x_values_list
-        if any(param is None for param in [a, b, x_values_list]):
-            raise ValueError("All parameters must be provided.")
+        self.y_values = y_values
+        required_params = {'a': a, 'b': b, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
     def graph(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -154,6 +192,8 @@ class Logarithmic:
         plt.title('Logarithmic Function')
         plt.grid(True)
         plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
         plt.show()
     def image(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -178,12 +218,22 @@ class Logarithmic:
         return img_buf
 
 class Trigonometric:
-    def __init__(self, a=None, b=None, x_values_list=None):
+    def __init__(self, a=None, b=None, x_values_list=None, y_values=None):
+        """
+        Initialize a trigonometric function with parameters:
+        :param a: Amplitude
+        :param b: Frequency
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
         self.a = a
         self.b = b
         self.x_values_list = x_values_list
-        if any(param is None for param in [a, b, x_values_list]):
-            raise ValueError("All parameters must be provided.")
+        self.y_values = y_values
+        required_params = {'a': a, 'b': b, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
     def graph(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -197,6 +247,8 @@ class Trigonometric:
         plt.title('Trigonometric Function (Senosoidal)')
         plt.grid(True)
         plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
         plt.show()
     def image(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -216,46 +268,125 @@ class Trigonometric:
         return img_buf
 
 class Polynomial:
-    def __init__(self, coeficients=None, x_values_list=None):
-        self.coeficients = coeficients
+    def __init__(self, polynomial_str=None, x_values_list=None, y_values=None):
+        """
+        Initialize a polynomial with a string and range for x and y values.
+        :param polynomial_str: String representation of the polynomial (e.g., "2x + 3x^2 - 1").
+        :param x_values_list: List defining the x-range as [start, end, points].
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
+        if polynomial_str is None or x_values_list is None:
+            raise ValueError("Both 'polynomial_str' and 'x_values_list' must be provided.")
+        
+        self.coefficients = self._parse_polynomial(polynomial_str)
         self.x_values_list = x_values_list
-        if any(param is None for param in [coeficients, x_values_list]):
-            raise ValueError("All parameters must be provided.")
+        self.y_values = y_values  # y-range as (min, max)
+
+    @staticmethod
+    def _parse_polynomial(poly_str):
+        """
+        Parse a polynomial string into a dictionary of coefficients.
+        :param poly_str: String representation of the polynomial.
+        :return: Dictionary with powers as keys and coefficients as values.
+        """
+        pattern = r'([+-]?\s*\d*)(x(?:\^(\d+))?)?'
+        terms = re.findall(pattern, poly_str.replace(" ", ""))
+        coefficients = {}
+
+        for term in terms:
+            coeff = term[0]
+            if coeff in ('+', '-'):  # Handle "+x" or "-x" cases
+                coeff += '1'
+            coeff = int(coeff) if coeff else 1
+
+            if term[1]:  # Term contains 'x'
+                power = int(term[2]) if term[2] else 1
+            else:  # Constant term
+                power = 0
+
+            coefficients[power] = coefficients.get(power, 0) + coeff
+
+        return coefficients
+
+    def _evaluate(self, x):
+        """
+        Evaluate the polynomial at a given value of x.
+        :param x: Value to evaluate the polynomial at.
+        :return: The result of the polynomial at x.
+        """
+        return sum(coeff * (x ** power) for power, coeff in self.coefficients.items())
 
     def graph(self):
+        """
+        Graph the polynomial function based on the provided range of x values.
+        """
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
-        y_values = np.polyval(self.coeficients, x_values)
+        y_values = [self._evaluate(x) for x in x_values]
 
-        plt.figure("Polynomial Function")
-        plt.plot(x_values, y_values, label=f'f(x) = {np.poly1d(self.coeficients)}')
+        poly_str = " + ".join(
+            f"{coeff}x^{power}" if power != 0 else str(coeff)
+            for power, coeff in sorted(self.coefficients.items(), reverse=True)
+        ).replace("x^1", "x").replace(" 1x", " x")
+        
+        plt.figure("Personalizad Function")
+        plt.plot(x_values, y_values, label=f'f(x) = {poly_str}')
         plt.xlabel('x')
         plt.ylabel('f(x)')
-        plt.title('Polynomial Function')
+        plt.title('Personalized Function')
         plt.grid(True)
         plt.legend()
+
+        # Set y-axis limits if provided
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
+
         plt.show()
-    def image(self):
-        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
-        y_values = np.polyval(self.coeficients, x_values)
 
+    def image(self):
+        """
+        Generate an image of the polynomial graph as a buffer.
+        """
+        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
+        y_values = [self._evaluate(x) for x in x_values]
+
+        poly_str = " + ".join(
+            f"{coeff}x^{power}" if power != 0 else str(coeff)
+            for power, coeff in sorted(self.coefficients.items(), reverse=True)
+        ).replace("x^1", "x").replace(" 1x", " x")
+        
         plt.figure("Polynomial Function")
-        plt.plot(x_values, y_values, label=f'f(x) = {np.poly1d(self.coeficients)}')
+        plt.plot(x_values, y_values, label=f'f(x) = {poly_str}')
         plt.xlabel('x')
         plt.ylabel('f(x)')
         plt.title('Polynomial Function')
         plt.grid(True)
         plt.legend()
+
+        # Set y-axis limits if provided
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
+
         img_buf = io.BytesIO()
         plt.savefig(img_buf, format='png')
-        
+        plt.close()
         return img_buf
 class Hyperbolic:
-    def __init__(self, a=None, b=None, x_values_list=None):
+    def __init__(self, a=None, b=None, x_values_list=None, y_values=None):
+        """
+        Initialize a hyperbolic function with parameters:
+        :param a: Amplitude
+        :param b: Scale factor
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
         self.a = a
         self.b = b
         self.x_values_list = x_values_list
-        if any(param is None for param in [a, b, x_values_list]):
-            raise ValueError("All parameters must be provided.")
+        self.y_values = y_values
+        required_params = {'a': a, 'b': b, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
     def graph(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -269,6 +400,8 @@ class Hyperbolic:
         plt.title('Hyperbolic Function')
         plt.grid(True)
         plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
         plt.show()
 
     def image(self):
@@ -288,12 +421,22 @@ class Hyperbolic:
         
         return img_buf
 class InverseTrigonometric:
-    def __init__(self, a=None, b=None, x_values_list=None):
+    def __init__(self, a=None, b=None, x_values_list=None, y_values=None):
+        """
+        Initialize an inverse trigonometric function with parameters:
+        :param a: Amplitude
+        :param b: Scale factor
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
         self.a = a
         self.b = b
         self.x_values_list = x_values_list
-        if any(param is None for param in [a, b, x_values_list]):
-            raise ValueError("All parameters must be provided.")
+        self.y_values = y_values
+        required_params = {'a': a, 'b': b, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
     def graph(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -307,6 +450,8 @@ class InverseTrigonometric:
         plt.title('Inverse Trigonometric Function (Arcosine)')
         plt.grid(True)
         plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
         plt.show()
 
     def image(self):
@@ -326,12 +471,22 @@ class InverseTrigonometric:
         
         return img_buf
 class Rational:
-    def __init__(self, a=None, b=None, x_values_list=None):
+    def __init__(self, a=None, b=None, x_values_list=None, y_values=None):
+        """
+        Initialize a rational function with parameters:
+        :param a: Numerator coefficient
+        :param b: Denominator coefficient
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
         self.a = a
         self.b = b
         self.x_values_list = x_values_list
-        if any(param is None for param in [a, b, x_values_list]):
-            raise ValueError("All parameters must be provided.")
+        self.y_values = y_values
+        required_params = {'a': a, 'b': b, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
     def graph(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -363,12 +518,22 @@ class Rational:
         
         return img_buf
 class Radical:
-    def __init__(self, a=None, b=None, x_values_list=None):
+    def __init__(self, a=None, b=None, x_values_list=None, y_values=None):
+        """
+        Initialize a radical function with parameters:
+        :param a: Coefficient outside radical
+        :param b: Coefficient inside radical
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
         self.a = a
         self.b = b
         self.x_values_list = x_values_list
-        if any(param is None for param in [a, b, x_values_list]):
-            raise ValueError("All parameters must be provided.")
+        self.y_values = y_values
+        required_params = {'a': a, 'b': b, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
     def graph(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -400,12 +565,22 @@ class Radical:
         
         return img_buf
 class Power:
-    def __init__(self, a=None, b=None, x_values_list=None):
+    def __init__(self, a=None, b=None, x_values_list=None, y_values=None):
+        """
+        Initialize a power function with parameters:
+        :param a: Base coefficient
+        :param b: Exponent
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
         self.a = a
         self.b = b
         self.x_values_list = x_values_list
-        if any(param is None for param in [a, b, x_values_list]):
-            raise ValueError("All parameters must be provided.")
+        self.y_values = y_values
+        required_params = {'a': a, 'b': b, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
     def graph(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -437,12 +612,22 @@ class Power:
         
         return img_buf
 class Absolute:
-    def __init__(self, a=None, b=None, x_values_list=None):
+    def __init__(self, a=None, b=None, x_values_list=None, y_values=None):
+        """
+        Initialize an absolute value function with parameters:
+        :param a: Coefficient outside absolute value
+        :param b: Coefficient inside absolute value
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
         self.a = a
         self.b = b
         self.x_values_list = x_values_list
-        if any(param is None for param in [a, b, x_values_list]):
-            raise ValueError("All parameters must be provided.")
+        self.y_values = y_values
+        required_params = {'a': a, 'b': b, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
     def graph(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -475,12 +660,22 @@ class Absolute:
         
         return img_buf
 class UnitStep:
-    def __init__(self, a=None, b=None, x_values_list=None):
+    def __init__(self, a=None, b=None, x_values_list=None, y_values=None):
+        """
+        Initialize a unit step function with parameters:
+        :param a: Height of step
+        :param b: Horizontal shift
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
         self.a = a
         self.b = b
         self.x_values_list = x_values_list
-        if any(param is None for param in [a, b, x_values_list]):
-            raise ValueError("All parameters must be provided.")
+        self.y_values = y_values
+        required_params = {'a': a, 'b': b, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
     def graph(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -513,13 +708,24 @@ class UnitStep:
         return img_buf
 
 class Sigmoid:
-    def __init__(self, a=None, b=None, c=None, x_values_list=None):
+    def __init__(self, a=None, b=None, c=None, x_values_list=None, y_values=None):
+        """
+        Initialize a sigmoid function with parameters:
+        :param a: Maximum value
+        :param b: Steepness
+        :param c: Midpoint
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
         self.a = a
         self.b = b
         self.c = c
         self.x_values_list = x_values_list
-        if any(param is None for param in [a, b, c, x_values_list]):
-            raise ValueError("All parameters must be provided.")
+        self.y_values = y_values
+        required_params = {'a': a, 'b': b, 'c': c, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
     def graph(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -551,10 +757,18 @@ class Sigmoid:
         
         return img_buf
 class Heaviside:
-    def __init__(self, x_values_list=None):
+    def __init__(self, x_values_list=None, y_values=None):
+        """
+        Initialize a Heaviside function with parameters:
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
         self.x_values_list = x_values_list
-        if x_values_list is None:
-            raise ValueError("The range of values ​​of x must be provided.")
+        self.y_values = y_values
+        required_params = {'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
     def graph(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -586,12 +800,22 @@ class Heaviside:
         
         return img_buf
 class Dirichlet:
-    def __init__(self, a=None, b=None, x_values_list=None):
+    def __init__(self, a=None, b=None, x_values_list=None, y_values=None):
+        """
+        Initialize a Dirichlet function with parameters:
+        :param a: Frequency
+        :param b: Phase shift
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
         self.a = a
         self.b = b
         self.x_values_list = x_values_list
-        if any(param is None for param in [a, b, x_values_list]):
-            raise ValueError("All parameters must be provided.")
+        self.y_values = y_values
+        required_params = {'a': a, 'b': b, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
     def graph(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -623,13 +847,24 @@ class Dirichlet:
         
         return img_buf
 class Gauss:
-    def __init__(self, a=None, b=None, c=None, x_values_list=None):
+    def __init__(self, a=None, b=None, c=None, x_values_list=None, y_values=None):
+        """
+        Initialize a Gaussian function with parameters:
+        :param a: Height of the curve's peak
+        :param b: Position of the center of the peak
+        :param c: Width of the bell
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
         self.a = a
         self.b = b
         self.c = c
         self.x_values_list = x_values_list
-        if any(param is None for param in [a, b, c, x_values_list]):
-            raise ValueError("All parameters must be provided.")
+        self.y_values = y_values
+        required_params = {'a': a, 'b': b, 'c': c, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
     def graph(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -661,14 +896,26 @@ class Gauss:
         
         return img_buf
 class Planck:
-    def __init__(self, h=None, k=None, c=None, T=None, x_values_list=None):
+    def __init__(self, h=None, k=None, c=None, T=None, x_values_list=None, y_values=None):
+        """
+        Initialize a Planck function with parameters:
+        :param h: Planck constant
+        :param k: Boltzmann constant
+        :param c: Speed of light
+        :param T: Temperature
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
         self.h = h
         self.k = k
         self.c = c
         self.T = T
         self.x_values_list = x_values_list
-        if any(param is None for param in [h, k, c, T, x_values_list]):
-            raise ValueError("All parameters must be provided.")
+        self.y_values = y_values
+        required_params = {'h': h, 'k': k, 'c': c, 'T': T, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
     def graph(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -702,13 +949,24 @@ class Planck:
         
         return img_buf
 class Triangular:
-    def __init__(self, a=None, b=None, c=None, x_values_list=None):
+    def __init__(self, a=None, b=None, c=None, x_values_list=None, y_values=None):
+        """
+        Initialize a triangular function with parameters:
+        :param a: Height of the triangle
+        :param b: Position of the peak
+        :param c: Width of the base
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
         self.a = a
         self.b = b
         self.c = c
         self.x_values_list = x_values_list
-        if any(param is None for param in [a, b, c, x_values_list]):
-            raise ValueError("All parameters must be provided.")
+        self.y_values = y_values
+        required_params = {'a': a, 'b': b, 'c': c, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
     def graph(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -740,10 +998,18 @@ class Triangular:
         
         return img_buf
 class Sign:
-    def __init__(self, x_values_list=None):
+    def __init__(self, x_values_list=None, y_values=None):
+        """
+        Initialize a sign function with parameters:
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
         self.x_values_list = x_values_list
-        if x_values_list is None:
-            raise ValueError("The range of values ​​of x must be provided.")
+        self.y_values = y_values
+        required_params = {'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
     def graph(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -775,12 +1041,22 @@ class Sign:
         
         return img_buf
 class SawTooth:
-    def __init__(self, a=None, b=None, x_values_list=None):
+    def __init__(self, a=None, b=None, x_values_list=None, y_values=None):
+        """
+        Initialize a sawtooth function with parameters:
+        :param a: Amplitude
+        :param b: Frequency
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
         self.a = a
         self.b = b
         self.x_values_list = x_values_list
-        if any(param is None for param in [a, b, x_values_list]):
-            raise ValueError("All parameters must be provided.")
+        self.y_values = y_values
+        required_params = {'a': a, 'b': b, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
     def graph(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -814,12 +1090,22 @@ class SawTooth:
         
         return img_buf
 class SquareWave:
-    def __init__(self, a=None, b=None, x_values_list=None):
+    def __init__(self, a=None, b=None, x_values_list=None, y_values=None):
+        """
+        Initialize a square wave function with parameters:
+        :param a: Amplitude
+        :param b: Frequency
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
         self.a = a
         self.b = b
         self.x_values_list = x_values_list
-        if any(param is None for param in [a, b, x_values_list]):
-            raise ValueError("All parameters must be provided.")
+        self.y_values = y_values
+        required_params = {'a': a, 'b': b, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
     def graph(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -853,11 +1139,20 @@ class SquareWave:
         
         return img_buf
 class SincDirichlet:
-    def __init__(self, a=None, x_values_list=None):
+    def __init__(self, a=None, x_values_list=None, y_values=None):
+        """
+        Initialize a sinc Dirichlet function with parameters:
+        :param a: Scale factor
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
         self.a = a
         self.x_values_list = x_values_list
-        if any(param is None for param in [a, x_values_list]):
-            raise ValueError("All parameters must be provided.")
+        self.y_values = y_values
+        required_params = {'a': a, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
     def graph(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -889,11 +1184,20 @@ class SincDirichlet:
         
         return img_buf
 class HyperbolicTangent:
-    def __init__(self, a=None, x_values_list=None):
+    def __init__(self, a=None, x_values_list=None, y_values=None):
+        """
+        Initialize a hyperbolic tangent function with parameters:
+        :param a: Scale factor
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
         self.a = a
         self.x_values_list = x_values_list
-        if any(param is None for param in [a, x_values_list]):
-            raise ValueError("All parameters must be provided.")
+        self.y_values = y_values
+        required_params = {'a': a, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
     def graph(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -925,10 +1229,18 @@ class HyperbolicTangent:
         
         return img_buf
 class BesselOrder0:
-    def __init__(self, x_values_list=None):
+    def __init__(self, x_values_list=None, y_values=None):
+        """
+        Initialize a Bessel function of order 0 with parameters:
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
         self.x_values_list = x_values_list
-        if x_values_list is None:
-            raise ValueError("The range of values ​​of x must be provided.")
+        self.y_values = y_values
+        required_params = {'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
     def graph(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -960,10 +1272,18 @@ class BesselOrder0:
         
         return img_buf
 class Error:
-    def __init__(self, x_values_list=None):
+    def __init__(self, x_values_list=None, y_values=None):
+        """
+        Initialize an error function with parameters:
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
         self.x_values_list = x_values_list
-        if x_values_list is None:
-            raise ValueError("The range of values ​​of x must be provided.")
+        self.y_values = y_values
+        required_params = {'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
     def graph(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -995,80 +1315,46 @@ class Error:
         
         return img_buf
 class SineFresnel:
-    def __init__(self, x_values_list=None):
+    def __init__(self, x_values_list=None, y_values=None):
+        """
+        Initialize a Fresnel sine function with parameters:
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
         self.x_values_list = x_values_list
-        if x_values_list is None:
-            raise ValueError("The range of values ​​of x must be provided.")
+        self.y_values = y_values
+        required_params = {'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
-    def graph(self):
-        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
-        # f(x) = S(x)
-        y_values = scipy.special.fresnel(x_values)[0]
-
-        plt.figure("Fresnel Sine Function")
-        plt.plot(x_values, y_values, label='f(x) = S(x)')
-        plt.xlabel('x')
-        plt.ylabel('f(x)')
-        plt.title('Fresnel Sine Function')
-        plt.grid(True)
-        plt.legend()
-        plt.show()
-    def image(self):
-        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
-        # f(x) = S(x)
-        y_values = scipy.special.fresnel(x_values)[0]
-
-        plt.figure("Fresnel Sine Function")
-        plt.plot(x_values, y_values, label='f(x) = S(x)')
-        plt.xlabel('x')
-        plt.ylabel('f(x)')
-        plt.title('Fresnel Sine Function')
-        plt.grid(True)
-        plt.legend()
-        img_buf = io.BytesIO()
-        plt.savefig(img_buf, format='png')
-        
-        return img_buf
 class CosineFresnel:
-    def __init__(self, x_values_list=None):
+    def __init__(self, x_values_list=None, y_values=None):
+        """
+        Initialize a Fresnel cosine function with parameters:
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
         self.x_values_list = x_values_list
-        if x_values_list is None:
-            raise ValueError("The range of values ​​of x must be provided.")
+        self.y_values = y_values
+        required_params = {'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
-    def graph(self):
-        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
-        # f(x) = C(x)
-        y_values = scipy.special.fresnel(x_values)[1]
-
-        plt.figure("Fresnel Cosine Function")
-        plt.plot(x_values, y_values, label='f(x) = C(x)')
-        plt.xlabel('x')
-        plt.ylabel('f(x)')
-        plt.title('Fresnel Cosine Function')
-        plt.grid(True)
-        plt.legend()
-        plt.show()
-    def image(self):
-        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
-        # f(x) = C(x)
-        y_values = scipy.special.fresnel(x_values)[1]
-
-        plt.figure("Fresnel Cosine Function")
-        plt.plot(x_values, y_values, label='f(x) = C(x)')
-        plt.xlabel('x')
-        plt.ylabel('f(x)')
-        plt.title('Fresnel Cosine Function')
-        plt.grid(True)
-        plt.legend()
-        img_buf = io.BytesIO()
-        plt.savefig(img_buf, format='png')
-        
-        return img_buf
 class Airy:
-    def __init__(self, x_values_list=None):
+    def __init__(self, x_values_list=None, y_values=None):
+        """
+        Initialize an Airy function with parameters:
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
         self.x_values_list = x_values_list
-        if x_values_list is None:
-            raise ValueError("The range of values ​​of x must be provided.")
+        self.y_values = y_values
+        required_params = {'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
     def graph(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
@@ -1511,7 +1797,7 @@ class ModifiedAckermann:
         plt.grid(True)
         plt.legend()
         plt.show()
-def image(self):
+    def image(self):
         def ack_modificada(m, n):
             if m == 0:
                 return n + 1
@@ -1560,7 +1846,7 @@ class Floor:
         plt.grid(True)
         plt.legend()
         plt.show()
-def image(self):
+    def image(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
         # f(x) =  floor(x)
         y_values = np.floor(x_values)
@@ -1793,3 +2079,211 @@ class TopHat:
         plt.savefig(img_buf, format='png')
         
         return img_buf
+
+class Weibull:
+    def __init__(self, k=None, lambda_param=None, x_values_list=None, y_values=None):
+        """
+        Initialize a Weibull distribution function with parameters:
+        :param k: Shape parameter (k > 0)
+        :param lambda_param: Scale parameter (lambda > 0)
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
+        self.k = k
+        self.lambda_param = lambda_param
+        self.x_values_list = x_values_list
+        self.y_values = y_values
+        required_params = {'k': k, 'lambda_param': lambda_param, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
+
+    def graph(self):
+        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
+        y_values = (self.k/self.lambda_param) * (x_values/self.lambda_param)**(self.k-1) * np.exp(-(x_values/self.lambda_param)**self.k)
+        
+        plt.figure("Weibull Distribution")
+        plt.plot(x_values, y_values, label=f'f(x) = (k/λ)(x/λ)^(k-1)exp(-(x/λ)^k)')
+        plt.xlabel('x')
+        plt.ylabel('f(x)')
+        plt.title('Weibull Distribution')
+        plt.grid(True)
+        plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
+        plt.show()
+
+    def image(self):
+        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
+        y_values = (self.k/self.lambda_param) * (x_values/self.lambda_param)**(self.k-1) * np.exp(-(x_values/self.lambda_param)**self.k)
+        
+        plt.figure("Weibull Distribution")
+        plt.plot(x_values, y_values, label=f'f(x) = (k/λ)(x/λ)^(k-1)exp(-(x/λ)^k)')
+        plt.xlabel('x')
+        plt.ylabel('f(x)')
+        plt.title('Weibull Distribution')
+        plt.grid(True)
+        plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
+        img_buf = io.BytesIO()
+        plt.savefig(img_buf, format='png')
+        return img_buf
+
+class Gompertz:
+    def __init__(self, a=None, b=None, c=None, x_values_list=None, y_values=None):
+        """
+        Initialize a Gompertz function with parameters:
+        :param a: Upper asymptote
+        :param b: Growth rate
+        :param c: Displacement along x-axis
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
+        self.a = a
+        self.b = b
+        self.c = c
+        self.x_values_list = x_values_list
+        self.y_values = y_values
+        required_params = {'a': a, 'b': b, 'c': c, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
+
+    def graph(self):
+        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
+        y_values = self.a * np.exp(-self.b * np.exp(-self.c * x_values))
+        
+        plt.figure("Gompertz Function")
+        plt.plot(x_values, y_values, label=f'f(x) = {self.a}*exp(-{self.b}*exp(-{self.c}x))')
+        plt.xlabel('x')
+        plt.ylabel('f(x)')
+        plt.title('Gompertz Function')
+        plt.grid(True)
+        plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
+        plt.show()
+
+    def image(self):
+        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
+        y_values = self.a * np.exp(-self.b * np.exp(-self.c * x_values))
+        
+        plt.figure("Gompertz Function")
+        plt.plot(x_values, y_values, label=f'f(x) = {self.a}*exp(-{self.b}*exp(-{self.c}x))')
+        plt.xlabel('x')
+        plt.ylabel('f(x)')
+        plt.title('Gompertz Function')
+        plt.grid(True)
+        plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
+        img_buf = io.BytesIO()
+        plt.savefig(img_buf, format='png')
+        return img_buf
+
+class Hill:
+    def __init__(self, vmax=None, k=None, n=None, x_values_list=None, y_values=None):
+        """
+        Initialize a Hill function with parameters:
+        :param vmax: Maximum velocity/response
+        :param k: Concentration producing half occupation (EC50)
+        :param n: Hill coefficient (cooperativity coefficient)
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
+        self.vmax = vmax
+        self.k = k
+        self.n = n
+        self.x_values_list = x_values_list
+        self.y_values = y_values
+        required_params = {'vmax': vmax, 'k': k, 'n': n, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
+
+class MichaelisMenten:
+    def __init__(self, vmax=None, km=None, x_values_list=None, y_values=None):
+        """
+        Initialize a Michaelis-Menten function with parameters:
+        :param vmax: Maximum velocity
+        :param km: Michaelis constant
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
+        self.vmax = vmax
+        self.km = km
+        self.x_values_list = x_values_list
+        self.y_values = y_values
+        required_params = {'vmax': vmax, 'km': km, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
+
+class Beta:
+    def __init__(self, alpha=None, beta=None, x_values_list=None, y_values=None):
+        """
+        Initialize a Beta distribution function with parameters:
+        :param alpha: First shape parameter (α > 0)
+        :param beta: Second shape parameter (β > 0)
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
+        self.alpha = alpha
+        self.beta = beta
+        self.x_values_list = x_values_list
+        self.y_values = y_values
+        required_params = {'alpha': alpha, 'beta': beta, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
+
+class Gamma:
+    def __init__(self, k=None, theta=None, x_values_list=None, y_values=None):
+        """
+        Initialize a Gamma distribution function with parameters:
+        :param k: Shape parameter (k > 0)
+        :param theta: Scale parameter (θ > 0)
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
+        self.k = k
+        self.theta = theta
+        self.x_values_list = x_values_list
+        self.y_values = y_values
+        required_params = {'k': k, 'theta': theta, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
+
+class Poisson:
+    def __init__(self, lambda_param=None, x_values_list=None, y_values=None):
+        """
+        Initialize a Poisson distribution function with parameters:
+        :param lambda_param: Average number of events (λ > 0)
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
+        self.lambda_param = lambda_param
+        self.x_values_list = x_values_list
+        self.y_values = y_values
+        required_params = {'lambda_param': lambda_param, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
+
+class ChiSquare:
+    def __init__(self, df=None, x_values_list=None, y_values=None):
+        """
+        Initialize a Chi-square distribution function with parameters:
+        :param df: Degrees of freedom (k > 0)
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
+        self.df = df
+        self.x_values_list = x_values_list
+        self.y_values = y_values
+        required_params = {'df': df, 'x_values_list': x_values_list}
+        missing = [param for param, value in required_params.items() if value is None]
+        if missing:
+            raise ValueError(f"Missing required parameters: {', '.join(missing)}")
