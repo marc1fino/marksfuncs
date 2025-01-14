@@ -2447,3 +2447,35 @@ class ChiSquare:
         missing = [param for param, value in required_params.items() if value is None]
         if missing:
             raise ValueError(f"Missing required parameters: {', '.join(missing)}")
+    
+    def graph(self):
+        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
+        y_values = scipy.stats.chi2.pdf(x_values, self.df)
+        
+        plt.figure("Chi-Square Distribution")
+        plt.plot(x_values, y_values, label=f'χ²(df={self.df})')
+        plt.xlabel('x')
+        plt.ylabel('f(x)')
+        plt.title('Chi-Square Distribution')
+        plt.grid(True)
+        plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
+        plt.show()
+
+    def image(self):
+        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
+        y_values = scipy.stats.chi2.pdf(x_values, self.df)
+        
+        plt.figure("Chi-Square Distribution")
+        plt.plot(x_values, y_values, label=f'χ²(df={self.df})')
+        plt.xlabel('x')
+        plt.ylabel('f(x)')
+        plt.title('Chi-Square Distribution')
+        plt.grid(True)
+        plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
+        img_buf = io.BytesIO()
+        plt.savefig(img_buf, format='png')
+        return img_buf
