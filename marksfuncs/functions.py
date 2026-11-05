@@ -2447,11 +2447,11 @@ class ChiSquare:
         missing = [param for param, value in required_params.items() if value is None]
         if missing:
             raise ValueError(f"Missing required parameters: {', '.join(missing)}")
-    
+
     def graph(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
         y_values = scipy.stats.chi2.pdf(x_values, self.df)
-        
+
         plt.figure("Chi-Square Distribution")
         plt.plot(x_values, y_values, label=f'χ²(df={self.df})')
         plt.xlabel('x')
@@ -2466,7 +2466,7 @@ class ChiSquare:
     def image(self):
         x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
         y_values = scipy.stats.chi2.pdf(x_values, self.df)
-        
+
         plt.figure("Chi-Square Distribution")
         plt.plot(x_values, y_values, label=f'χ²(df={self.df})')
         plt.xlabel('x')
@@ -2478,4 +2478,204 @@ class ChiSquare:
             plt.ylim(self.y_values[0], self.y_values[1])
         img_buf = io.BytesIO()
         plt.savefig(img_buf, format='png')
+        return img_buf
+
+
+class PolynomialCoefficients:
+    """
+    Polynomial function defined by degree and coefficients.
+    Allows specifying each term's coefficient directly by degree.
+    """
+    def __init__(self, coefficients=None, x_values_list=None, y_values=None):
+        """
+        Initialize a polynomial with coefficients by degree.
+        :param coefficients: Dict or list of coefficients where key/index is the degree.
+                             e.g., {0: 1, 1: 2, 2: 3} for 3x^2 + 2x + 1
+                             or [1, 2, 3] for same polynomial (index = degree)
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        """
+        if coefficients is None or x_values_list is None:
+            raise ValueError("Both 'coefficients' and 'x_values_list' must be provided.")
+
+        # Convert list to dict if needed
+        if isinstance(coefficients, list):
+            self.coefficients = {i: coeff for i, coeff in enumerate(coefficients) if coeff != 0}
+        elif isinstance(coefficients, dict):
+            self.coefficients = {int(k): v for k, v in coefficients.items() if v != 0}
+        else:
+            raise ValueError("Coefficients must be a dict (degree: coefficient) or list.")
+
+        self.x_values_list = x_values_list
+        self.y_values = y_values
+        self.degree = max(self.coefficients.keys()) if self.coefficients else 0
+
+    def _evaluate(self, x):
+        """Evaluate the polynomial at a given value of x."""
+        return sum(coeff * (x ** power) for power, coeff in self.coefficients.items())
+
+    def graph(self):
+        """Graph the polynomial function."""
+        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
+        y_values = [self._evaluate(x) for x in x_values]
+
+        # Build polynomial string for display
+        terms = []
+        for power, coeff in sorted(self.coefficients.items(), reverse=True):
+            if power == 0:
+                terms.append(f"{coeff}")
+            elif power == 1:
+                terms.append(f"{coeff}x" if coeff != 1 else "x")
+            else:
+                terms.append(f"{coeff}x^{power}" if coeff != 1 else f"x^{power}")
+        poly_str = " + ".join(terms).replace("+ -", "- ")
+
+        plt.figure("Polynomial Function (Coefficients)")
+        plt.plot(x_values, y_values, label=f'f(x) = {poly_str}')
+        plt.xlabel('x')
+        plt.ylabel('f(x)')
+        plt.title('Polynomial Function (Coefficients)')
+        plt.grid(True)
+        plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
+        plt.show()
+
+    def image(self):
+        """Generate an image of the polynomial graph as a buffer."""
+        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
+        y_values = [self._evaluate(x) for x in x_values]
+
+        terms = []
+        for power, coeff in sorted(self.coefficients.items(), reverse=True):
+            if power == 0:
+                terms.append(f"{coeff}")
+            elif power == 1:
+                terms.append(f"{coeff}x" if coeff != 1 else "x")
+            else:
+                terms.append(f"{coeff}x^{power}" if coeff != 1 else f"x^{power}")
+        poly_str = " + ".join(terms).replace("+ -", "- ")
+
+        plt.figure("Polynomial Function (Coefficients)")
+        plt.plot(x_values, y_values, label=f'f(x) = {poly_str}')
+        plt.xlabel('x')
+        plt.ylabel('f(x)')
+        plt.title('Polynomial Function (Coefficients)')
+        plt.grid(True)
+        plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
+
+        img_buf = io.BytesIO()
+        plt.savefig(img_buf, format='png')
+        plt.close()
+        return img_buf
+
+
+class ExpressionFunction:
+    """
+    Free-form mathematical expression evaluator and plotter.
+    Like GeoGebra - accepts any valid mathematical expression as a string.
+    Uses a safe evaluation context with numpy/scipy functions.
+    """
+    def __init__(self, expression=None, x_values_list=None, y_values=None, variable='x'):
+        """
+        Initialize a free-form expression function.
+        :param expression: Mathematical expression as string (e.g., "sin(x) + x**2", "exp(-x)*cos(x)")
+        :param x_values_list: List defining the x-range as [start, end, points]
+        :param y_values: Tuple defining the y-range as (min, max). Optional.
+        :param variable: Variable name used in expression (default 'x')
+        """
+        if expression is None or x_values_list is None:
+            raise ValueError("Both 'expression' and 'x_values_list' must be provided.")
+
+        self.expression = expression
+        self.x_values_list = x_values_list
+        self.y_values = y_values
+        self.variable = variable
+
+        # Safe namespace for evaluation
+        self._namespace = {
+            'x': None,  # Will be set during evaluation
+            'pi': np.pi,
+            'e': np.e,
+            'inf': np.inf,
+            'nan': np.nan,
+            # Numpy functions
+            'sin': np.sin, 'cos': np.cos, 'tan': np.tan,
+            'arcsin': np.arcsin, 'arccos': np.arccos, 'arctan': np.arctan,
+            'arctan2': np.arctan2,
+            'sinh': np.sinh, 'cosh': np.cosh, 'tanh': np.tanh,
+            'arcsinh': np.arcsinh, 'arccosh': np.arccosh, 'arctanh': np.arctanh,
+            'exp': np.exp, 'expm1': np.expm1, 'log': np.log, 'log10': np.log10,
+            'log1p': np.log1p, 'log2': np.log2,
+            'sqrt': np.sqrt, 'cbrt': np.cbrt, 'square': np.square,
+            'abs': np.abs, 'fabs': np.fabs,
+            'floor': np.floor, 'ceil': np.ceil, 'trunc': np.trunc,
+            'round': np.round,
+            'sign': np.sign, 'heaviside': np.heaviside,
+            'maximum': np.maximum, 'minimum': np.minimum,
+            'clip': np.clip,
+            'power': np.power,
+            'mod': np.mod, 'fmod': np.fmod,
+            'sum': np.sum, 'prod': np.prod,
+            'mean': np.mean, 'std': np.std, 'var': np.var,
+            'min': np.min, 'max': np.max,
+            'deg2rad': np.deg2rad, 'rad2deg': np.rad2deg,
+            # Scipy special functions
+            'erf': scipy.special.erf, 'erfc': scipy.special.erfc,
+            'gamma': scipy.special.gamma, 'gammaln': scipy.special.gammaln,
+            'beta': scipy.special.beta, 'betaln': scipy.special.betaln,
+            'j0': scipy.special.j0, 'j1': scipy.special.j1,
+            'jn': scipy.special.jn, 'yn': scipy.special.yn,
+            'airy': scipy.special.airy,
+            'sinc': np.sinc,
+            # Constants
+            'pi': np.pi, 'e': np.e,
+        }
+
+    def _evaluate(self, x):
+        """Safely evaluate the expression at a given x value."""
+        self._namespace[self.variable] = x
+        try:
+            # Use eval with restricted namespace
+            result = eval(self.expression, {"__builtins__": {}}, self._namespace)
+            return float(result) if np.isscalar(result) else result
+        except Exception as e:
+            return np.nan
+
+    def graph(self):
+        """Graph the free-form expression function."""
+        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
+        y_values = np.array([self._evaluate(x) for x in x_values])
+
+        plt.figure("Expression Function")
+        plt.plot(x_values, y_values, label=f'f({self.variable}) = {self.expression}')
+        plt.xlabel(self.variable)
+        plt.ylabel('f(x)')
+        plt.title('Free Expression Function')
+        plt.grid(True)
+        plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
+        plt.show()
+
+    def image(self):
+        """Generate an image of the expression graph as a buffer."""
+        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
+        y_values = np.array([self._evaluate(x) for x in x_values])
+
+        plt.figure("Expression Function")
+        plt.plot(x_values, y_values, label=f'f({self.variable}) = {self.expression}')
+        plt.xlabel(self.variable)
+        plt.ylabel('f(x)')
+        plt.title('Free Expression Function')
+        plt.grid(True)
+        plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
+
+        img_buf = io.BytesIO()
+        plt.savefig(img_buf, format='png')
+        plt.close()
         return img_buf
