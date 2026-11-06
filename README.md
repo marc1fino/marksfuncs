@@ -10,6 +10,16 @@ The project provides ready-to-use classes for elementary functions (linear, quad
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 ![Dependencies](https://img.shields.io/badge/Dependencies-NumPy%2C%20SciPy%2C%20Matplotlib-blue?style=flat-square)
 
+## UI
+
+This library also features a companion graphical interface designed for seamless interaction, real-time calculations, and effortless mathematical exploration.
+
+- **Repository:** [marksfuncs-ui](https://github.com/marc1fino/marksfuncs-ui)
+- **Highlights:**
+  * **Interactive Plotting:** Visualize and analyze mathematical functions and expressions easily.
+  * **Real-time Results:** Instant calculations and evaluations as you type.
+  * **Lightweight & Cross-Platform:** Built to complement the core Python library smoothly.
+
 ## Features
 
 - **50+ function classes** — from elementary to special functions and probability distributions
