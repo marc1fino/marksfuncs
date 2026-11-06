@@ -1328,6 +1328,42 @@ class SineFresnel:
         if missing:
             raise ValueError(f"Missing required parameters: {', '.join(missing)}")
 
+    def graph(self):
+        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
+        # f(x) = S(x) - Fresnel sine integral
+        y_values = scipy.special.fresnel(x_values)[0]
+
+        plt.figure("Fresnel Sine Function")
+        plt.plot(x_values, y_values, label='f(x) = S(x)')
+        plt.xlabel('x')
+        plt.ylabel('f(x)')
+        plt.title('Fresnel Sine Function')
+        plt.grid(True)
+        plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
+        plt.show()
+
+    def image(self):
+        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
+        # f(x) = S(x) - Fresnel sine integral
+        y_values = scipy.special.fresnel(x_values)[0]
+
+        plt.figure("Fresnel Sine Function")
+        plt.plot(x_values, y_values, label='f(x) = S(x)')
+        plt.xlabel('x')
+        plt.ylabel('f(x)')
+        plt.title('Fresnel Sine Function')
+        plt.grid(True)
+        plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
+        img_buf = io.BytesIO()
+        plt.savefig(img_buf, format='png')
+
+        return img_buf
+
+
 class CosineFresnel:
     def __init__(self, x_values_list=None, y_values=None):
         """
@@ -1341,6 +1377,42 @@ class CosineFresnel:
         missing = [param for param, value in required_params.items() if value is None]
         if missing:
             raise ValueError(f"Missing required parameters: {', '.join(missing)}")
+
+    def graph(self):
+        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
+        # f(x) = C(x) - Fresnel cosine integral
+        y_values = scipy.special.fresnel(x_values)[1]
+
+        plt.figure("Fresnel Cosine Function")
+        plt.plot(x_values, y_values, label='f(x) = C(x)')
+        plt.xlabel('x')
+        plt.ylabel('f(x)')
+        plt.title('Fresnel Cosine Function')
+        plt.grid(True)
+        plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
+        plt.show()
+
+    def image(self):
+        x_values = np.linspace(self.x_values_list[0], self.x_values_list[1], self.x_values_list[2])
+        # f(x) = C(x) - Fresnel cosine integral
+        y_values = scipy.special.fresnel(x_values)[1]
+
+        plt.figure("Fresnel Cosine Function")
+        plt.plot(x_values, y_values, label='f(x) = C(x)')
+        plt.xlabel('x')
+        plt.ylabel('f(x)')
+        plt.title('Fresnel Cosine Function')
+        plt.grid(True)
+        plt.legend()
+        if self.y_values:
+            plt.ylim(self.y_values[0], self.y_values[1])
+        img_buf = io.BytesIO()
+        plt.savefig(img_buf, format='png')
+
+        return img_buf
+
 
 class Airy:
     def __init__(self, x_values_list=None, y_values=None):
