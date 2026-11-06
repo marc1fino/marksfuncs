@@ -17,7 +17,6 @@ This library also features a companion graphical interface designed for seamless
 - **Repository:** [marksfuncs-ui](https://github.com/marc1fino/marksfuncs-ui)
 - **Highlights:**
   * **Interactive Plotting:** Visualize and analyze mathematical functions and expressions easily.
-  * **Real-time Results:** Instant calculations and evaluations as you type.
   * **Lightweight & Cross-Platform:** Built to complement the core Python library smoothly.
 
 ## Features
